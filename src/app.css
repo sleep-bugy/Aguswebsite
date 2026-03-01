@@ -79,6 +79,47 @@
   --brand-gradient: linear-gradient(135deg, #ffb784 0%, #e6c0a0 100%);
 }
 
+.light {
+  --primary: #8d4f00;
+  --onPrimary: #ffffff;
+  --primaryContainer: #ffb784;
+  --onPrimaryContainer: #301400;
+
+  --secondary: #77573d;
+  --onSecondary: #ffffff;
+  --secondaryContainer: #e6c0a0;
+  --onSecondaryContainer: #2a1603;
+
+  --tertiary: #665f32;
+  --onTertiary: #ffffff;
+  --tertiaryContainer: #d0c88c;
+  --onTertiaryContainer: #201c00;
+
+  --error: #ba1a1a;
+  --onError: #ffffff;
+
+  --background: #fff8f5;
+  --onBackground: #221a15;
+
+  --surface: #fff8f5;
+  --onSurface: #221a15;
+
+  --surfaceContainerLowest: #ffffff;
+  --surfaceContainerLow: #fcf1ec;
+  --surfaceContainer: #f6ebe6;
+  --surfaceContainerHigh: #f1e5e0;
+  --surfaceContainerHighest: #ebdfda;
+
+  --surfaceVariant: #efdfd7;
+  --onSurfaceVariant: #4f443e;
+
+  --outline: #81746d;
+  --outlineVariant: #d3c4bc;
+
+  --brand-gradient: linear-gradient(135deg, #8d4f00 0%, #77573d 100%);
+}
+
+html,
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -86,6 +127,17 @@ body {
   background-color: var(--background);
   color: var(--onBackground);
   overflow-x: hidden;
+
+  /* Hide scrollbar for universal aesthetic */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Hide scrollbar globally for Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+  display: none;
 }
 
 /* Utilities Tambahan (Opsional) */
@@ -112,6 +164,17 @@ body {
   box-shadow: 0 12px 40px rgba(255, 183, 132, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
+.light .bento-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+.light .bento-card:hover {
+  border: 1px solid rgba(141, 79, 0, 0.3);
+  box-shadow: 0 12px 40px rgba(141, 79, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
 .text-gradient {
   background: var(--brand-gradient);
   -webkit-background-clip: text;
@@ -125,6 +188,14 @@ body {
 
 .glow-primary-hover:hover {
   box-shadow: 0 0 30px rgba(255, 183, 132, 0.6);
+}
+
+.light .glow-primary {
+  box-shadow: 0 0 20px rgba(141, 79, 0, 0.2);
+}
+
+.light .glow-primary-hover:hover {
+  box-shadow: 0 0 30px rgba(141, 79, 0, 0.35);
 }
 
 /* Custom Animations */
@@ -144,6 +215,59 @@ body {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+/* Theme Toggle View Transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+.light::view-transition-new(root) {
+  animation: reveal-light 0.4s ease-out forwards;
+}
+
+.light::view-transition-old(root) {
+  animation: none;
+  z-index: -1;
+}
+
+:root:not(.light)::view-transition-new(root) {
+  animation: reveal-dark 0.4s ease-out forwards;
+}
+
+:root:not(.light)::view-transition-old(root) {
+  animation: none;
+  z-index: -1;
+}
+
+@keyframes reveal-light {
+  from {
+    clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+  }
+
+  to {
+    clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+  }
+}
+
+@keyframes reveal-dark {
+  from {
+    clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+  }
+
+  to {
+    clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+  }
 }
 
 @keyframes pulse-slow {
@@ -227,9 +351,15 @@ body {
   border-radius: 50%;
   filter: blur(100px);
   opacity: 0.15;
+  mix-blend-mode: screen;
   z-index: -20;
   animation: blob-move 15s infinite alternate ease-in-out;
   pointer-events: none;
+}
+
+.light .bg-blob {
+  mix-blend-mode: multiply;
+  opacity: 0.3;
 }
 
 .blob-1 {
@@ -260,6 +390,20 @@ body {
   opacity: 0.05;
 }
 
+.light .blob-3 {
+  opacity: 0.15;
+}
+
+.cursor-glow {
+  opacity: 0.2;
+  mix-blend-mode: screen;
+}
+
+.light .cursor-glow {
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+}
+
 @keyframes grid-scroll {
   0% {
     transform: translateY(0);
@@ -285,4 +429,10 @@ body {
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 10%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 10%, transparent 80%);
   pointer-events: none;
+}
+
+.light .bg-grid-animated {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
 }

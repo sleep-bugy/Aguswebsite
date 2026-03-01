@@ -8,6 +8,16 @@
   let mouseY = $state(0);
 
   onMount(() => {
+    // Remove splash screen with fade-out effect once Svelte boots
+    const splash = document.getElementById("splash-screen");
+    if (splash) {
+      splash.style.opacity = "0";
+      splash.style.visibility = "hidden";
+      setTimeout(() => {
+        splash.remove();
+      }, 500); // Wait for transition to finish
+    }
+
     handleLocation();
 
     const handleMouseMove = (e) => {
@@ -41,7 +51,7 @@
   
   <!-- Global Cursor Light (Hidden on mobile) -->
   <div
-    class="absolute inset-0 opacity-20 pointer-events-none hidden md:block"
+    class="cursor-glow absolute inset-0 pointer-events-none hidden md:block"
     style="background: radial-gradient(800px circle at {mouseX}px {mouseY}px, var(--primary) 0%, transparent 50%)"
   ></div>
 

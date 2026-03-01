@@ -2,11 +2,14 @@
   import IconMenu from "~icons/material-symbols/menu-rounded";
   import IconClose from "~icons/material-symbols/close-rounded";
   import IconGithub from "~icons/simple-icons/github";
+  import IconSun from "~icons/ph/sun-bold";
+  import IconMoon from "~icons/ph/moon-bold";
   import { navigate } from "../router.js";
   import { onMount } from "svelte";
 
   let isMenuOpen = $state(false);
   let isScrolled = $state(false);
+  let isDarkMode = $state(true);
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen;
@@ -18,7 +21,52 @@
     isMenuOpen = false;
   }
 
+  function toggleTheme(event) {
+    // Determine exact click position for the circular animation origin
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    // Set custom CSS variables for the animation origin
+    document.documentElement.style.setProperty("--x", `${x}px`);
+    document.documentElement.style.setProperty("--y", `${y}px`);
+
+    const newThemeIsDark = !isDarkMode;
+
+    // Use View Transitions API if supported
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        applyTheme(newThemeIsDark);
+      });
+    } else {
+      // Fallback for browsers without View Transitions
+      applyTheme(newThemeIsDark);
+    }
+  }
+
+  function applyTheme(dark) {
+    isDarkMode = dark;
+    if (dark) {
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    }
+  }
+
   onMount(() => {
+    // Initialize Theme
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "light") {
+      applyTheme(false);
+    } else if (storedTheme === "dark") {
+      applyTheme(true);
+    } else {
+      // Fallback to OS preference
+      const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+      applyTheme(!prefersLight);
+    }
+
     const handleScroll = () => {
       isScrolled = window.scrollY > 20;
     };
@@ -102,6 +150,17 @@
 
     <div class="flex items-center gap-2">
       <div class="hidden lg:flex items-center gap-2">
+        <button
+          onclick={toggleTheme}
+          class="p-2.5 rounded-full hover:bg-on-surface/10 transition-transform hover:scale-105 active:scale-95 inline-flex items-center justify-center text-on-surface cursor-pointer"
+          aria-label="Toggle Theme"
+        >
+          {#if isDarkMode}
+            <IconMoon class="text-xl" />
+          {:else}
+            <IconSun class="text-xl" />
+          {/if}
+        </button>
         <a
           href="https://github.com/Xtra-Manager-Software"
           target="_blank"
@@ -173,6 +232,20 @@
           >
         </li>
         <div class="h-px bg-outline/10 my-2"></div>
+        <li>
+          <button
+            onclick={(e) => { toggleTheme(e); }}
+            class="w-full flex items-center justify-center gap-3 rounded-xl hover:bg-on-surface/10 py-3 px-4 font-medium transition-colors text-on-surface cursor-pointer"
+          >
+            {#if isDarkMode}
+              <IconMoon class="text-xl" />
+              <span>Light Mode</span>
+            {:else}
+              <IconSun class="text-xl" />
+              <span>Dark Mode</span>
+            {/if}
+          </button>
+        </li>
         <li>
           <a
             href="https://github.com/Xtra-Manager-Software"
