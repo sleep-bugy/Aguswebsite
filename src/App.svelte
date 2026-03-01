@@ -4,15 +4,41 @@
   import { route, params, handleLocation } from "./lib/router.js";
   import { onMount } from "svelte";
 
+  let mouseX = $state(0);
+  let mouseY = $state(0);
+
   onMount(() => {
+    // Remove splash screen with fade-out effect once Svelte boots
+    const splash = document.getElementById("splash-screen");
+    if (splash) {
+      splash.style.opacity = "0";
+      splash.style.visibility = "hidden";
+      setTimeout(() => {
+        splash.remove();
+      }, 500); // Wait for transition to finish
+    }
+
     handleLocation();
+
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   });
 
   const routes = {
     home: () => import("./lib/routes/Home.svelte"),
+    platform: () => import("./lib/routes/Platform.svelte"),
+    team: () => import("./lib/routes/Team.svelte"),
     "server-error": () => import("./lib/routes/ServerError.svelte"),
     maintenance: () => import("./lib/routes/Maintenance.svelte"),
     downloads: () => import("./lib/routes/Downloads.svelte"),
+    blog: () => import("./lib/routes/Blog.svelte"),
     "blog-article": () => import("./lib/routes/BlogArticle.svelte"),
     "not-found": () => import("./lib/routes/NotFound.svelte"),
   };
@@ -22,8 +48,23 @@
   <Navbar />
 {/if}
 
+<!-- Animated Global Background Elements (Always visible, perfectly synced) -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-background">
+  <div class="bg-grid-animated"></div>
+  
+  <!-- Global Cursor Light (Hidden on mobile) -->
+  <div
+    class="cursor-glow absolute inset-0 pointer-events-none hidden md:block"
+    style="background: radial-gradient(800px circle at {mouseX}px {mouseY}px, var(--primary) 0%, transparent 50%)"
+  ></div>
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+</div>
+
 <main
-  class="min-h-screen bg-background text-on-surface flex flex-col items-center pt-20"
+  class="min-h-screen bg-transparent text-on-surface flex flex-col items-center pt-16 md:pt-20 relative z-10 w-full"
 >
   {#await routes[$route]()}
     <div class="h-screen w-full flex items-center justify-center">
