@@ -1,55 +1,65 @@
-<h1 align="center">
-    Xtra Manager Software Website
-</h1>
+# Svelte library
 
-<p align="center">
-    <img src="https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&colorA=363A4F&logo=svelte&logoColor=D9E0EE">
-    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&colorA=363A4F&logo=tailwind-css&logoColor=D9E0EE">
-    <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&colorA=363A4F&logo=vite&logoColor=D9E0EE">
-    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&colorA=363A4F&logo=javascript&logoColor=363A4F">
-</p>
+Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
 
----
+Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
 
-## About
+## Creating a project
 
-This is the **Official Website** for the **Xtra Manager Software Community**.  
-It serves as the central hub for our open-source projects, team information, and community resources.
+If you're seeing this, you've probably already done this step. Congrats!
 
-Built with **Svelte** and **Tailwind CSS**, it embodies our philosophy of "building programs that are actually useful" through a clean, responsive, and performance-focused design.
+```sh
+# create a new project in the current directory
+npx sv create
 
----
+# create a new project in my-app
+npx sv create my-app
+```
 
-## Development Setup
+To recreate this project with the same configuration:
 
-### Prerequisites
+```sh
+# recreate this project
+npx sv create --template library --types ts --add eslint --install npm xmsfrontend
+```
 
-- Node.js (v18+)
-- Bun (Preferred) or npm/pnpm
+## Developing
 
-### Local Development
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-1. Clone the repository:
+```sh
+npm run dev
 
-   ```bash
-   git clone https://github.com/Xtra-Manager-Software/website.git
-   cd website
-   ```
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-2. Install dependencies:
+Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
 
-   ```bash
-   bun install
-   ```
+## Building
 
-3. Start the dev server:
-   ```bash
-   bun dev
-   ```
+To build your library:
 
----
+```sh
+npm pack
+```
 
-## License
+To create a production version of your showcase app:
 
-This project is open-sourced software licensed under the **MIT License**.  
-See the [LICENSE](LICENSE) file for more information.
+```sh
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+## Publishing
+
+Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
+
+To publish your library to [npm](https://www.npmjs.com):
+
+```sh
+npm publish
+```
