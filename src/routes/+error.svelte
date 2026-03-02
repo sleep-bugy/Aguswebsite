@@ -99,14 +99,14 @@
         class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
       >
         <button
-          on:click={() => window.history.back()}
+          onclick={() => window.history.back()}
           class="px-8 py-3.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-full font-medium transition-all duration-300 hover:shadow-md active:scale-95 border border-outline/10"
         >
           Go Back
         </button>
 
         <button
-          on:click={() => window.location.href = "/"}
+          onclick={() => window.location.href = "/"}
           class="group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary text-on-primary rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
         >
           <div

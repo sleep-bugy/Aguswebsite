@@ -5,11 +5,6 @@ export const config = {
 };
 import { API_URL } from '$env/static/private';
 
-// Optionally define prerender entries if you want statically compiled slugs, but since
-// categories could change, ISR + dynamic paths without entries is fine as long as fallback is allowed.
-// For Vercel, this requires `entries` theoretically if prerender is true. Since we use ISR config, 
-// we leave it dynamic.
-
 export async function load({ fetch, params, parent }) {
     try {
         const { slug } = params;
